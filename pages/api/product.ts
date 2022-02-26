@@ -1,4 +1,4 @@
-import products from '../../data/products.json';
+import products from '../../public/data/products.json';
 import type { NextApiRequest, NextApiResponse } from 'next';
 import type Product from '../../types/product';
 
