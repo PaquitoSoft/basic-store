@@ -1,12 +1,10 @@
 import Head from 'next/head';
 import type { NextPage } from 'next';
-import ProductCard from '../components/product-card';
+import { useCallback } from 'react';
+import CatalogProduct from '../components/catalog-product';
 import type Product from '../types/product';
-// import products from '../data/products.json';
-import Link from 'next/link';
 import useProducts from '../hooks/use-products';
 import useShopCart from '../hooks/use-shop-cart';
-import { useCallback } from 'react';
 import AppHeader from '../components/app-header';
 
 const Home: NextPage = () => {
@@ -31,7 +29,7 @@ const Home: NextPage = () => {
           <h1 className="text-4xl pb-10">Catalog</h1>
           <div className="grid grid-cols-1 gap-y-40 sm:grid-cols-2 gap-x-6 lg:grid-cols-3 xl:grid-cols-4 xl:gap-x-8">
             {products.map((product: Product) => (
-              <ProductCard
+              <CatalogProduct
                 key={product.id}
                 product={product}
                 onAddToCart={onAddToCart}

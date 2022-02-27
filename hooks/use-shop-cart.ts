@@ -1,4 +1,4 @@
-import { get, post } from "@paquitosoft/fetcher";
+import { get, post, put, del } from "@paquitosoft/fetcher";
 import { useEffect, useState } from "react";
 import { ShopCart } from "../types/shop-cart";
 
@@ -24,14 +24,13 @@ function useShopCart() {
       const data = await get<ServerData>(ENDPOINT_URL);
       setShopCart(data.shopCart);
     };
-    console.log('Loading shop cart...');
     loadShopCart();
   }, []);
 
-  const addToShopCart = async (productId: number) => {
+  const fireRequest = async (requester: () => Promise<ServerData>) => {
     try {
       setLoading(true);
-      const data = await post<ServerData>(ENDPOINT_URL, { productId });
+      const data = await requester();
       setShopCart(data.shopCart);
     } catch(error) {
       console.error(error);
@@ -39,8 +38,18 @@ function useShopCart() {
       setLoading(false);
     }
   };
-  const updateInShopCart = (itemId: number, newQuantity: number) => {};
-  const removeFromShopCart = (itemId: number) => {};
+
+  const addToShopCart = async (productId: number) => {
+    fireRequest(() => post(ENDPOINT_URL, { productId }));
+  };
+
+  const updateInShopCart = (itemId: number, newQuantity: number) => {
+    fireRequest(() => put(ENDPOINT_URL, { itemId, newQuantity }));
+  };
+
+  const removeFromShopCart = (itemId: number) => {
+    fireRequest(() => del(ENDPOINT_URL, { body: { itemId } }));
+  };
 
   return {
     loading,

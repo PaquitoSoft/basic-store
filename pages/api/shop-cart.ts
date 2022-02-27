@@ -8,13 +8,6 @@ type Data = {
   shopCart: ShopCart;
 } | { message: string };
 
-// const shopCart: ShopCart = {
-//   id: Date.now(),
-//   items: [],
-//   totalItems: 0,
-//   totalAmount: 0
-// };
-
 // --------------- BEGIN: Helper functions ---------------
 const SHOP_CART_PATH = '/api/shop-cart';
 async function readShopCart(): Promise<ShopCart> {
@@ -24,6 +17,13 @@ async function readShopCart(): Promise<ShopCart> {
 }
 async function writeShopCart(shopCart: ShopCart): Promise<ShopCart> {
   const filePath = resolve('./public', 'data', 'shop-cart.json');
+  const totals = shopCart.items.reduce((acc, item) => {
+    acc.items += item.quantity;
+    acc.amount += item.quantity * item.product.price;
+    return acc;
+  }, { items: 0, amount: 0 });
+  shopCart.totalItems = totals.items;
+  shopCart.totalAmount = totals.amount;
   await writeFile(filePath, JSON.stringify(shopCart));
   return shopCart;
 }
@@ -51,9 +51,6 @@ async function addToCart(req: NextApiRequest, res: NextApiResponse<Data>) {
     shopCartItem.quantity += 1;
     shopCartItem.amount += shopCartItem.product.price;
   }
-
-  shopCart.totalItems += 1;
-  shopCart.totalAmount += product.price;
 
   await writeShopCart(shopCart);
 
