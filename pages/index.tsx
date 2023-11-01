@@ -2,9 +2,9 @@ import Head from 'next/head';
 import type { NextPage } from 'next';
 import { useCallback } from 'react';
 import CatalogProduct from '../components/catalog-product';
+import { useShopCart } from '../components/shop-cart-context';
 import type Product from '../types/product';
 import useProducts from '../hooks/use-products';
-import useShopCart from '../hooks/use-shop-cart';
 import AppHeader from '../components/app-header';
 
 const Home: NextPage = () => {
@@ -14,6 +14,8 @@ const Home: NextPage = () => {
   const onAddToCart = useCallback((product: Product) => {
     addToShopCart(product.id);
   }, [addToShopCart]);
+
+  console.log('Rendering <HomePage />');
 
   return (
     <>

@@ -19,7 +19,9 @@ function useProducts() {
       setError(null);
       try {
         const data = await get<ServerData>(ENDPOINT_URL, { ttl: 60 });
+        console.log('Fetching products from server...');
         setProducts(data.products);
+        console.log('Updated products from server!');
       } catch(error) {
         setError(error as Error);
       } finally {

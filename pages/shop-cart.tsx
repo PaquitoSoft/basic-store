@@ -2,11 +2,11 @@ import Head from 'next/head';
 import AppHeader from '../components/app-header';
 import ItemsGrid from '../components/items-grid';
 import ShopCartItem from '../components/shop-cart-item';
-import useShopCart from '../hooks/use-shop-cart';
+import { useShopCart } from '../components/shop-cart-context';
 
 function ShopCartView() {
   const { shopCart, updateInShopCart, removeFromShopCart } = useShopCart();
-
+  console.log('Rendering <ShopCartView />');
   return (
     <>
       <Head>

@@ -1,5 +1,5 @@
+import { ReactNode, createContext, useEffect, useState, useContext, useMemo } from "react";
 import { get, post, put, del } from "@paquitosoft/fetcher";
-import { useEffect, useState } from "react";
 import { ShopCart } from "../types/shop-cart";
 
 type ServerData = {
@@ -8,30 +8,46 @@ type ServerData = {
 
 const ENDPOINT_URL = "/api/shop-cart";
 
-const defaultShopCart = {
+const defaultShopCart: ShopCart = {
   id: -1,
   items: [],
   totalItems: 0,
   totalAmount: 0
 };
 
-function useShopCart() {
-  const [shopCart, setShopCart] = useState<ShopCart>(defaultShopCart);
-  const [loading, setLoading] = useState(false);
+const ShopCartContext = createContext({
+  shopCart: defaultShopCart,
+  updateShopCart: (_shopCart: ShopCart) => {},
+});
 
+export const ShopCartProvider = ({ children }: { children: ReactNode }) => {
+  const [shopCart, setShopCart] = useState<ShopCart>(defaultShopCart);
+  const context = useMemo(() => ({ shopCart, updateShopCart: setShopCart }), [shopCart]);
+  console.log('Rendering ShopCartProvider with totalItems:', shopCart.totalItems);
   useEffect(() => {
     const loadShopCart = async () => {
       const data = await get<ServerData>(ENDPOINT_URL);
+      console.log('Updating ShopCart from server...');
       setShopCart(data.shopCart);
+      console.log('ShopCart updated from server!');
     };
     loadShopCart();
   }, []);
+
+  return (
+    <ShopCartContext.Provider value={context}>{children}</ShopCartContext.Provider>
+  )
+};
+
+export function useShopCart() {
+  const { shopCart, updateShopCart } = useContext(ShopCartContext);
+  const [loading, setLoading] = useState(false);
 
   const fireRequest = async (requester: () => Promise<ServerData>) => {
     try {
       setLoading(true);
       const data = await requester();
-      setShopCart(data.shopCart);
+      updateShopCart(data.shopCart);
     } catch(error) {
       console.error(error);
     } finally {

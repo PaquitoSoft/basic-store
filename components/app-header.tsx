@@ -6,6 +6,7 @@ type Props = {
 };
 
 function AppHeader({ shopCart }: Props) {
+  console.log('Rendering <AppHeader /> with totalItems', shopCart.totalItems);
   return (
     <header>
       <div className="max-w-7xl mx-auto bg-slate-600 px-4 py-6 mt-4 rounded-xl">

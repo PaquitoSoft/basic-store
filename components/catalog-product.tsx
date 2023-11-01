@@ -7,6 +7,7 @@ type Props = {
 };
 
 function CatalogProduct({ product, onAddToCart }: Props) {
+  console.log('Rendering <CatalogProduct />');
   return (
     <ProductCard product={product}>
       <p className="mt-1 text-lg font-medium text-gray-900">{product.price} EUR</p>

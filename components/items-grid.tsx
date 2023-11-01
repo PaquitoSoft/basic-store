@@ -4,6 +4,7 @@ type Props = {
 };
 
 function ItemsGrid({ title, children }: Props) {
+  console.log('Rendering <ItemsGrid />');
   return (
     <div className="max-w-2xl mx-auto py-8 px-4 sm:px-6 lg:max-w-7xl lg:px-8">
       <h1 className="text-4xl pb-10">{title}</h1>
