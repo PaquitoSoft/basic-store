@@ -27,6 +27,7 @@ async function writeShopCart(shopCart: ShopCart): Promise<ShopCart> {
   await writeFile(filePath, JSON.stringify(shopCart));
   return shopCart;
 }
+const wait = (timeout = 1000) => new Promise(resolve => setTimeout(resolve, timeout));
 // --------------- END: Helper functions ---------------
 
 async function getCart(req: NextApiRequest, res: NextApiResponse<Data>) {
@@ -97,13 +98,14 @@ const handlersMap: Record<string, NextApiHandler> = {
   DELETE: removeFromToCart
 };
 
-export default function handler(
+export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<Data>
 ) {
   const shopCartHandler = handlersMap[req.method!];
 
   if (shopCartHandler) {
+    await wait(2000);
     return shopCartHandler(req, res);
   } else {
     throw new Error(`Unsupported method ${req.method}`);

@@ -2,18 +2,18 @@ import Head from 'next/head';
 import type { NextPage } from 'next';
 import { useCallback } from 'react';
 import CatalogProduct from '../components/catalog-product';
-import { useShopCart } from '../components/shop-cart-context';
 import type Product from '../types/product';
 import useProducts from '../hooks/use-products';
 import AppHeader from '../components/app-header';
+import { addToShopCart, useShopCart } from '../stores/shop-cart.store';
 
 const Home: NextPage = () => {
-  const { products/*, loading, error */} = useProducts();
-  const { shopCart, addToShopCart } = useShopCart();
+  const { products } = useProducts();
+  const { shopCart, isLoading } = useShopCart();
 
   const onAddToCart = useCallback((product: Product) => {
     addToShopCart(product.id);
-  }, [addToShopCart]);
+  }, []);
 
   console.log('Rendering <HomePage />');
 
@@ -25,7 +25,7 @@ const Home: NextPage = () => {
       </Head>
 
       <main>
-        <AppHeader shopCart={shopCart} />
+        <AppHeader shopCart={isLoading ? undefined : shopCart} />
 
         <div className="max-w-2xl mx-auto py-8 px-4 sm:px-6 lg:max-w-7xl lg:px-8">
           <h1 className="text-4xl pb-10">Catalog</h1>

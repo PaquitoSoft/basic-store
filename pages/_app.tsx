@@ -1,12 +1,15 @@
-import { ShopCartProvider } from '../components/shop-cart-context';
-import '../styles/globals.css'
+import { useEffect } from 'react';
 import type { AppProps } from 'next/app'
+import { ShopCartProvider } from '../components/shop-cart-context';
+import { loadShopCart } from '../stores/shop-cart.store';
+import '../styles/globals.css'
 
 function MyApp({ Component, pageProps }: AppProps) {
+  useEffect(() => {
+    loadShopCart();
+  }, []);
   return (
-    <ShopCartProvider>
-      <Component {...pageProps} />
-    </ShopCartProvider>
+    <Component {...pageProps} />
   );
 }
 
